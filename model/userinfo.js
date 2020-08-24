@@ -1,16 +1,20 @@
-// const mongoose = require("mongoose");
-// const Schema = require("mongoose").Schema;
+const mongoose = require("mongoose");
 
-// const UserSchema = new Schema({
-//     customerid: Type.number({ required: true }), // Tror detta skapas av sig själv?
-//     firstname: Type.string({ required: true }),
-//     lastname: Type.string({ required: true }),
-//     email: Type.string({ required: true }),
-//     phone: Type.string({ required: true }),
-//     comment: Type.string({ required: true }),
-//     date: Type.date({ default: Date.now }),
-//     timeslot: Type.string({ required: true }), // Är inte säker på om timesloten är en string eller number?
-//     qty: Type.number({ required: true })
-// })
-// const User = mongoose.model('User', UserSchema);
-// module.exports = User
+const userSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: {type: String, required: true }
+});
+
+const bookingSchema = new mongoose.Schema({
+    comment: { type: String, required: true },
+    date: { type: Date, required: true }, 
+    timeslot: { type: String, required: true },
+    qty: {type: String, required: true},
+});
+
+const User = mongoose.model("user", userSchema)
+const Booking = mongoose.model("booking", bookingSchema)
+
+module.exports = User;
+module.exports = Booking;
