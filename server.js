@@ -22,6 +22,9 @@ connection.once("open", () => {
 });
 
 // lägg till Routes här och app.use på dessa
+const userForm = require("./routes/userForm");
+
+app.use("/", userForm);
 
 app.listen(port, () => {
     console.log(`server is running on ${port}`);
