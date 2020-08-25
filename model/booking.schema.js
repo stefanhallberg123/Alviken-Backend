@@ -20,7 +20,7 @@ const mongoose = require("mongoose");
 const Booking = new mongoose.Schema({
     comment: { type: String },
     date: { type: Date },
-    timeslot: { type: String },
+    timeslot: { type: String, default: Date.now },
     qty: { type: String },
     user: {
         name: { type: String },

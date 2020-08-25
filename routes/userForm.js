@@ -11,7 +11,7 @@ router.get("/add", (req, res) => {
 })
 router.post("/add", async (req, res) => {
 
-    const newComment = await new Booking({ comment: req.body.comment, user: { name: req.body.name, } }).save();
+    const newComment = await new Booking({ comment: req.body.comment, date: req.body.date, timeslot: req.body.timeslot, qty: req.body.qty, user: { name: req.body.name, email: req.body.email, phone: req.body.phone, customerId: req.body.customerId } }).save();
     console.log(newComment);
 })
 
