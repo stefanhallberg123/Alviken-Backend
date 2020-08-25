@@ -15,6 +15,7 @@ const mongoose = require("mongoose");
 //     },
 //     id: { type: String }
 // });
+
 const bookingSchema = new mongoose.Schema({
     user: {
         name: { type: String },
