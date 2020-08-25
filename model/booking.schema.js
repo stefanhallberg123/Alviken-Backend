@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 // const bookingSchema = new mongoose.Schema({
 //     user: {
 //         name: { type: String, required: true },
@@ -15,23 +16,21 @@ const mongoose = require("mongoose");
 //     },
 //     id: { type: String }
 // });
-const bookingSchema = new mongoose.Schema({
+
+const Booking = new mongoose.Schema({
+    comment: { type: String },
+    date: { type: Date },
+    timeslot: { type: String },
+    qty: { type: String },
     user: {
         name: { type: String },
         email: { type: String },
         phone: { type: String },
         customerId: { type: Number }
     },
-    booking: {
-        comment: { type: String },
-        date: { type: Date },
-        timeslot: { type: String },
-        qty: { type: String },
-    },
-    id: { type: String }
 });
 
 
-const Booking = mongoose.model("booking", bookingSchema)
+const BookingSchema = mongoose.model("booking", Booking)
 
-module.exports = Booking;
+module.exports = BookingSchema;
