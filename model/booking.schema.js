@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const Booking = new mongoose.Schema({
     comment: { type: String },
-    date: { type: Date },
-    timeslot: { type: String, default: Date.now },
+    date: { type: Date, default: Date.now },
+    timeslot: { type: String, },
     qty: { type: String },
     user: {
         name: { type: String },
