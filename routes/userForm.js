@@ -14,9 +14,9 @@ router.post("/", async (req, res) => {
     timeslot: req.body.timeslot,
     qty: req.body.qty,
     user: {
-      name: req.body.bookingUser.name,
-      email: req.body.bookingUser.email,
-      phone: req.body.bookingUser.phone,
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
       // customerId: req.body.customerId,
     },
   }).save();
