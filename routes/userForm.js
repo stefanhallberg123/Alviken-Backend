@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const booking = await new Booking({
-    table: 1, // antal som läggs till?
+    table, // antal som läggs till?
     comment: req.body.comment,
     date: req.body.date,
     timeslot: req.body.timeslot,
