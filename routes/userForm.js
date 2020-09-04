@@ -3,9 +3,8 @@ const router = require("express").Router();
 let Booking = require("../model/booking.schema");
 
 router.get("/", async (req, res) => {
-  //console.log(Booking)
-  const booking = await Booking.find({});
-  res.send(booking)
+  const booking = await Booking.find();
+  res.send(booking);
 });
 
 router.post("/", async (req, res) => {
@@ -23,18 +22,22 @@ router.post("/", async (req, res) => {
     },
   }).save();
   console.log(booking);
+
+  res.send(booking);
 });
 
 router.get("/thankyou", async (req, res) => {
   const orderNumber = await Booking.findOne({
     orderNumber: req.body._customerId,
   });
+
+  res.send(orderNumber);
 });
 router.get("/admin", async (req, res) => {
-  const bookings = await Booking.find();
-  console.log(bookings);
-  res.send(bookings);
+  const booking = await Booking.find({});
+  res.send(booking);
 });
+
 router.post("/admin/create", async (req, res) => {
   const booking = await new Booking({
     table: 1, // antal som läggs till?
@@ -50,24 +53,37 @@ router.post("/admin/create", async (req, res) => {
     },
   }).save();
   console.log(booking);
+
+  res.send("successful");
 });
-router.post("/admin/edit/id", async (req, res) => {
-  const booking = await Booking.updateOne({ _id: req.body._customerId })
-  booking.comment = req.body.comment,
-   booking.date =req.body.date,
-    booking.timeslot = req.body.timeslot,
-    booking.qty = req.body.qty,
-    booking.user = {
+router.post("admin/edit/id", async (req, res) => {
+  const booking = await Booking.updateOne({ id: req.body.customerId });
+  (booking.comment = req.body.comment),
+    (booking.date = req.body.date),
+    (booking.timeslot = req.body.timeslot),
+    (booking.qty = req.body.qty),
+    (booking.user = {
       name: req.body.name,
       email: req.body.email,
-      phone: req.body.phone
-    }, await booking.save()
-    console.log(booking);
+      phone: req.body.phone,
+    }),
+    await booking.save();
+  console.log(booking);
+
+  res.send("Successful");
+});
+
+router.get("/admin/edit/id", async (req, res) => {
+  const booking = await Booking.find({ id: mongoose.ObjectId(userID) })
+  res.send(booking);
+});
+
+router.delete("admin/delete/id", async (req, res) => {
+  await Booking.deleteOne({
+    _id: req.params._customerId,
   });
-  router.post("admin/delete/id", async(req, res ) => {
-    await Booking.deleteOne({
-      _id: req.params._customerId
-    })
-  });
+
+  res.send("successful");
+});
 
 module.exports = router;
