@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const booking = await new Booking({
-    table, // antal som läggs till?
+    table: 1, // antal som läggs till?
     comment: req.body.comment,
     date: req.body.date,
     timeslot: req.body.timeslot,
@@ -27,11 +27,16 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/thankyou", async (req, res) => {
-  const orderNumber = await Booking.findOne({
-    orderNumber: req.body._customerId,
-  });
+  const customerId = await Booking.findOne(
+    {},
+    {},
+    { sort: { created_at: -1 } },
+    function (err, post) {
+      console.log(post);
+    }
+  );
 
-  res.send(orderNumber);
+  res.send(customerId);
 });
 router.get("/admin", async (req, res) => {
   const booking = await Booking.find({});
