@@ -42,6 +42,7 @@ router.get("/admin", async (req, res) => {
   const booking = await Booking.find({});
   res.send(booking);
 });
+
 router.post("/admin/create", async (req, res) => {
   const booking = await new Booking({
     table: 1, // antal som läggs till?
@@ -60,8 +61,8 @@ router.post("/admin/create", async (req, res) => {
 
   res.send("successful");
 });
-router.put("admin/edit/id", async (req, res) => {
-  const booking = await Booking.updateOne({ _id: req.body._customerId });
+router.post("admin/edit/id", async (req, res) => {
+  const booking = await Booking.updateOne({ id: req.body.customerId });
   (booking.comment = req.body.comment),
     (booking.date = req.body.date),
     (booking.timeslot = req.body.timeslot),
@@ -76,6 +77,12 @@ router.put("admin/edit/id", async (req, res) => {
 
   res.send("Successful");
 });
+
+router.get("/admin/edit/id", async (req, res) => {
+  const booking = await Booking.find({ id: mongoose.ObjectId(userID) })
+  res.send(booking);
+});
+
 router.delete("admin/delete/id", async (req, res) => {
   await Booking.deleteOne({
     _id: req.params._customerId,
