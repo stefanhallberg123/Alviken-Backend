@@ -27,16 +27,9 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/thankyou", async (req, res) => {
-  const customerId = await Booking.findOne(
-    {},
-    {},
-    { sort: { created_at: -1 } },
-    function (err, post) {
-      console.log(post);
-    }
-  );
-
-  res.send(customerId);
+  const id = await Booking.findOne({ id: req.body._id }).sort({ _id: -1 });
+  console.log(id);
+  res.send(id);
 });
 router.get("/admin", async (req, res) => {
   const booking = await Booking.find({});
@@ -78,9 +71,10 @@ router.post("admin/edit/id", async (req, res) => {
   res.send("Successful");
 });
 
-router.get("/admin/edit/id", async (req, res) => {
-  const booking = await Booking.find({ id: mongoose.ObjectId(userID) })
-  res.send(booking);
+router.get("/admin/edit/:id", async (req, res) => {
+  const id = await Booking.findById({ _id: req.params.id });
+  console.log(id);
+  res.send(id);
 });
 
 router.delete("admin/delete/id", async (req, res) => {
