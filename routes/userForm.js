@@ -2,6 +2,18 @@ const router = require("express").Router();
 
 let Booking = require("../model/booking.schema");
 
+const nodemailer = require("nodemailer");
+
+let transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "resturangalviken@gmail.com",
+    pass: "alviken123",
+  },
+});
+
 router.get("/", async (req, res) => {
   const booking = await Booking.find();
   res.send(booking);
@@ -21,14 +33,26 @@ router.post("/", async (req, res) => {
       // customerId: req.body.customerId,
     },
   }).save();
-  console.log(booking);
-
-  res.send(booking);
+  const mail = await Booking.findOne({ id: req.body._id }).sort({ _id: -1 });
+  let mailOptions = {
+    from: "alviken@gmail.com",
+    to: mail.user.email,
+    subject: "Reservations Alviken",
+    html: `<h1>Hej ${mail.user.name}! </h1>
+    <p>Tack För dig bokning!</p>`,
+  };
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+  res.send(booking + mail);
 });
 
 router.get("/thankyou", async (req, res) => {
   const id = await Booking.findOne({ id: req.body._id }).sort({ _id: -1 });
-  console.log(id);
   res.send(id);
 });
 router.get("/admin", async (req, res) => {
