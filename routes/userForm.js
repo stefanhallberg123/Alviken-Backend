@@ -1,4 +1,5 @@
 const router = require("express").Router();
+require("dotenv").config();
 
 let Booking = require("../model/booking.schema");
 
@@ -9,8 +10,8 @@ let transporter = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    user: "resturangalviken@gmail.com",
-    pass: "alviken123",
+    user: process.env.user,
+    pass: process.env.password,
   },
 });
 
@@ -35,11 +36,13 @@ router.post("/", async (req, res) => {
   }).save();
   const mail = await Booking.findOne({ id: req.body._id }).sort({ _id: -1 });
   let mailOptions = {
-    from: "alviken@gmail.com",
+    from: process.env.user,
     to: mail.user.email,
     subject: "Reservations Alviken",
     html: `<h1>Hej ${mail.user.name}! </h1>
-    <p>Tack För dig bokning!</p>`,
+    <p>Tack För dig bokning!</p>
+    <p>Ditt ordernummer är: ${mail._id}</p>
+    <p>Om vi behöver nå dig så ringer vi på: ${mail.user.phone} eller skickar ett mejl på ${mail.user.email} </p>`,
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
