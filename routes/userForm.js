@@ -4,7 +4,7 @@ require("dotenv").config();
 let Booking = require("../model/booking.schema");
 
 const nodemailer = require("nodemailer");
-
+//config för nodemailer
 let transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
@@ -14,12 +14,12 @@ let transporter = nodemailer.createTransport({
     pass: process.env.password,
   },
 });
-
+//hämtar start-datan
 router.get("/", async (req, res) => {
   const booking = await Booking.find();
   res.send(booking);
 });
-
+// skickar in alla värden in i databasen från Modal.tsx
 router.post("/", async (req, res) => {
   const booking = await new Booking({
     table: 1,
@@ -33,6 +33,7 @@ router.post("/", async (req, res) => {
       phone: req.body.phone,
     },
   }).save();
+  // hämtar det sista objektet från databasen som sedan visas i mailet när man postat
   const mail = await Booking.findOne({ id: req.body._id }).sort({ _id: -1 });
   let mailOptions = {
     from: process.env.user,
@@ -52,7 +53,7 @@ router.post("/", async (req, res) => {
   });
   res.send(booking + mail);
 });
-
+// hämtar det sista objektet från databasen som sedan visas i thankyou.tsx
 router.get("/thankyou", async (req, res) => {
   const id = await Booking.findOne({ id: req.body._id }).sort({ _id: -1 });
   res.send(id);
@@ -61,7 +62,7 @@ router.get("/admin", async (req, res) => {
   const booking = await Booking.find({});
   res.send(booking);
 });
-
+// admin som skapar en order och sedan får man ett mejl kundens uppgifter
 router.post("/admin/create", async (req, res) => {
   const booking = await new Booking({
     table: 1,
@@ -93,7 +94,14 @@ router.post("/admin/create", async (req, res) => {
   });
   res.send(booking);
 });
+// hämtar ursprunglig data från kunden så man vet vad som ska ändras
+router.get("/admin/edit/:id", async (req, res) => {
+  const id = await Booking.findById({ _id: req.params.id });
+  console.log(id);
+  res.send(id);
+});
 
+// ändrar kunds data och sedan får man ett mejl med ändringarna
 router.put("admin/edit/id", async (req, res) => {
   const booking = await Booking.updateOne({ id: req.body.customerId });
   (booking.comment = req.body.comment),
@@ -124,18 +132,11 @@ router.put("admin/edit/id", async (req, res) => {
   });
   res.send(booking);
 });
-
-router.get("/admin/edit/:id", async (req, res) => {
-  const id = await Booking.findById({ _id: req.params.id });
-  console.log(id);
-  res.send(id);
-});
-
+// tar bort kunds bokning och får ett bekräftelsemejl på detta
 router.delete("admin/delete/id", async (req, res) => {
   const user = await Booking.deleteOne({
     _id: req.params._customerId,
   });
-
   let mailOptions = {
     from: process.env.user,
     to: user.user.email,
