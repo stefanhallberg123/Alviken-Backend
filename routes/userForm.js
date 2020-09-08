@@ -33,6 +33,7 @@ router.get("/thankyou", async (req, res) => {
 
   res.send(orderNumber);
 });
+
 router.get("/admin", async (req, res) => {
   const booking = await Booking.find({});
   res.send(booking);
@@ -54,36 +55,58 @@ router.post("/admin/create", async (req, res) => {
   }).save();
   console.log(booking);
 
-  res.send("successful");
+  res.send(booking);
 });
-router.post("admin/edit/id", async (req, res) => {
-  const booking = await Booking.updateOne({ id: req.body.customerId });
-  (booking.comment = req.body.comment),
-    (booking.date = req.body.date),
-    (booking.timeslot = req.body.timeslot),
-    (booking.qty = req.body.qty),
-    (booking.user = {
+
+router.patch("admin/edit/:id", async (req, res) => {
+  const updatedData = await Booking.updateOne({ id: req.params.id });
+  (id.comment = req.body.comment),
+    (id.date = req.body.date),
+    (id.timeslot = req.body.timeslot),
+    (id.qty = req.body.qty),
+    (id.user = {
       name: req.body.name,
       email: req.body.email,
       phone: req.body.phone,
     }),
-    await booking.save();
-  console.log(booking);
+    await updatedData.save();
+  console.log(id);
 
-  res.send("Successful");
+  res.send(updatedData);
 });
 
-router.get("/admin/edit/id", async (req, res) => {
-  const booking = await Booking.find({ id: mongoose.ObjectId(userID) })
-  res.send(booking);
+router.get("/admin/edit/:id", async (req, res) => {
+  const id = await Booking.findById({_id: req.params.id})
+  console.log(id);
+  res.send(id);
 });
+console.log("userForm 1s")
 
-router.delete("admin/delete/id", async (req, res) => {
-  await Booking.deleteOne({
-    _id: req.params._customerId,
-  });
+router.delete("/admin/delete/:id", async (req, res) => {
+  console.log(req.params.id, "userfrom2")
+  const deletedData = await Booking.findByIdAndRemove(
+    req.params.id,
+  );
 
-  res.send("successful");
+  res.send(deletedData);
 });
 
 module.exports = router;
+
+
+// router.post("admin/edit/id", async (req, res) => {
+//   const booking = await Booking.updateOne({ id: req.body.customerId });
+//   (booking.comment = req.body.comment),
+//     (booking.date = req.body.date),
+//     (booking.timeslot = req.body.timeslot),
+//     (booking.qty = req.body.qty),
+//     (booking.user = {
+//       name: req.body.name,
+//       email: req.body.email,
+//       phone: req.body.phone,
+//     }),
+//     await booking.save();
+//   console.log(booking);
+
+//   res.send("Successful");
+// });
