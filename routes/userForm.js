@@ -59,6 +59,7 @@ router.get("/thankyou", async (req, res) => {
   const id = await Booking.findOne({ id: req.body._id }).sort({ _id: -1 });
   res.send(id);
 });
+
 router.get("/admin", async (req, res) => {
   const booking = await Booking.find({});
   res.send(booking);
@@ -103,7 +104,7 @@ router.get("/admin/edit/:id", async (req, res) => {
 });
 
 // ändrar kunds data och sedan får man ett mejl med ändringarna
-router.put("admin/edit/id", async (req, res) => {
+router.post("/admin/edit/:id", async (req, res) => {
   const booking = await Booking.updateOne({ id: req.body.customerId });
   (booking.comment = req.body.comment),
     (booking.date = req.body.date),
@@ -133,11 +134,14 @@ router.put("admin/edit/id", async (req, res) => {
   });
   res.send(booking);
 });
+
 // tar bort kunds bokning och får ett bekräftelsemejl på detta
-router.delete("admin/delete/id", async (req, res) => {
-  const user = await Booking.deleteOne({
-    _id: req.params._customerId,
+router.delete("/admin/delete/:id", async (req, res) => {
+  console.log(req.params)
+  const user = await Booking.findByIdAndDelete({
+    _id: req.params.id,
   });
+  // console.log(req.params.booking._id, "userForm1");
   let mailOptions = {
     from: process.env.user,
     to: user.user.email,
@@ -154,7 +158,8 @@ router.delete("admin/delete/id", async (req, res) => {
       console.log("Email sent: " + info.response);
     }
   });
-  res.send(booking);
+  // console.log(req.params, "userForm2");
+  res.send(user);
 });
 
 module.exports = router;
