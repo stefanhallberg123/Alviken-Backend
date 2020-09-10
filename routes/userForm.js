@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
     to: mail.user.email,
     subject: "Reservations Alviken",
     html: `<h1>Hej ${mail.user.name}! </h1>
-    <p>Tack För dig bokning!</p>
+    <p>Tack för din bokning!</p>
     <p>Ditt ordernummer är: ${mail._id}</p>
     <p>Om vi behöver nå dig så ringer vi på: ${mail.user.phone} eller skickar ett mejl på ${mail.user.email} </p>`,
   };
@@ -82,7 +82,7 @@ router.post("/admin/create", async (req, res) => {
     to: booking.user.email,
     subject: "Reservations Alviken",
     html: `<h1>Hej ${booking.user.name}! </h1>
-    <p>Tack För dig bokning!</p>
+    <p>Tack för din bokning!</p>
     <p>Ditt ordernummer är: ${booking._id}</p>
     <p>Om vi behöver nå dig så ringer vi på: ${booking.user.phone} eller skickar ett mejl på ${booking.user.email} </p>`,
   };
