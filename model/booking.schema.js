@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const Booking = new mongoose.Schema({
   comment: { type: String },
-  date: { type: Date },
+  date: { type: String },
   timeslot: { type: String },
   qty: { type: String },
   table: { type: Number, min: 1, max: 15 }, // veta antalet bord?

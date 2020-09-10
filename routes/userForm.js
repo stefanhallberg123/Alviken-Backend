@@ -23,14 +23,14 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const booking = await new Booking({
     table: 1,
-    comment: req.body.comment,
-    date: req.body.date,
-    timeslot: req.body.timeslot,
-    qty: req.body.qty,
+    comment: req.body.userData.comment,
+    date: req.body.bookingData.date,
+    timeslot: req.body.bookingData.time,
+    qty: req.body.bookingData.people,
     user: {
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
+      name: req.body.userData.name,
+      email: req.body.userData.email,
+      phone: req.body.userData.phone,
     },
   }).save();
   // hämtar det sista objektet från databasen som sedan visas i mailet när man postat
@@ -137,7 +137,7 @@ router.post("/admin/edit/:id", async (req, res) => {
 
 // tar bort kunds bokning och får ett bekräftelsemejl på detta
 router.delete("/admin/delete/:id", async (req, res) => {
-  console.log(req.params)
+  console.log(req.params);
   const user = await Booking.findByIdAndDelete({
     _id: req.params.id,
   });
