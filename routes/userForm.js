@@ -42,6 +42,7 @@ router.post("/", async (req, res) => {
     html: `<h1>Hej ${mail.user.name}! </h1>
     <p>Tack för din bokning!</p>
     <p>Ditt ordernummer är: ${mail._id}</p>
+     <p> Vi ska försöka beakta ditt önskemål som var: ${mail.comment}
     <p>Om vi behöver nå dig så ringer vi på: ${mail.user.phone} eller skickar ett mejl på ${mail.user.email} </p>`,
   };
   transporter.sendMail(mailOptions, function (error, info) {
